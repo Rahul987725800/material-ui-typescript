@@ -12,6 +12,24 @@ const theme = createTheme({
       main: '#f83245',
       light: '#f8324526',
     },
+    background: {
+      default: '#fff',
+    },
+  },
+  // shape: {
+  //   borderRadius: 120,
+  // },
+  overrides: {
+    // MuiAppBar: {
+    //   root: {
+    //     transform: `translateZ(0)`,
+    //   },
+    // },
+  },
+  props: {
+    MuiIconButton: {
+      disableRipple: true,
+    },
   },
 });
 function MyApp({ Component, pageProps }: AppProps) {

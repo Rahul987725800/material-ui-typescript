@@ -55,13 +55,13 @@ const useStyles = makeStyles((theme) => ({
   },
   searchInput: {
     opacity: '.6',
-    padding: '0px 8px',
+    padding: `0px ${theme.spacing(1)}px`,
     fontSize: '.8rem',
     '&:hover': {
       backgroundColor: '#f2f2f2',
     },
     '& .MuiSvgIcon-root': {
-      marginRight: '8px',
+      marginRight: theme.spacing(1),
     },
   },
   btnRoot: {
