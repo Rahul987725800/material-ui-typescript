@@ -1,12 +1,7 @@
 import { makeStyles, TextField as MuiTextField } from '@material-ui/core';
-interface TextFieldProps {
+import { BasicControlProps } from '.';
+interface TextFieldProps extends BasicControlProps {
   variant?: 'standard' | 'filled' | 'outlined';
-  name: string;
-  label: string;
-  value: string;
-  onChange: (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => void;
 }
 const TextField = ({
   variant = 'outlined',

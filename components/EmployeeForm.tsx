@@ -1,6 +1,7 @@
 import useForm from '@hooks/useForm';
 import { makeStyles, Grid } from '@material-ui/core';
 import Controls from '@components/controls';
+import * as employeeService from '@services/employeeService';
 interface FormValues {
   id: number;
   fullName: string;
@@ -35,7 +36,7 @@ const EmployeeForm = ({}: EmployeeFormProps) => {
     useForm<FormValues>(initialFormValues);
 
   return (
-    <form className={styles.root}>
+    <form className={styles.root} autoComplete="off">
       <Grid container>
         <Grid item xs={6}>
           <Controls.TextField
@@ -61,6 +62,27 @@ const EmployeeForm = ({}: EmployeeFormProps) => {
             value={values.gender}
             onChange={handleInputChange}
             items={genderItems}
+          />
+          <Controls.Select
+            name="departmentId"
+            label="Department"
+            value={values.departmentId}
+            onChange={handleInputChange as any}
+            options={employeeService.getDepartmentCollection()}
+          />
+          <Controls.Checkbox
+            name="isPermanent"
+            label="Permanent Employee"
+            value={values.isPermanent}
+            onChange={(e, checked: any) => {
+              e.target = {
+                ...e.target,
+                name: e.target.name,
+                value: checked,
+              };
+              // console.log(e.target);
+              handleInputChange(e);
+            }}
           />
         </Grid>
       </Grid>

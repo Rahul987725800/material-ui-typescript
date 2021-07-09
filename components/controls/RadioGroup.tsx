@@ -6,13 +6,8 @@ import {
   FormControlLabel,
   Radio,
 } from '@material-ui/core';
-interface RadioGroupProps {
-  name: string;
-  label: string;
-  value: string;
-  onChange: (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => void;
+import { BasicControlProps } from '.';
+interface RadioGroupProps extends BasicControlProps {
   items: {
     value: string;
     label: string;
