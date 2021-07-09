@@ -2,8 +2,8 @@ import { makeStyles } from '@material-ui/core';
 import classNames from 'classnames';
 import SideMenu from '@components/SideMenu';
 import Header from '@components/Header';
-import PeopleOutlineTwoToneIcon from '@material-ui/icons/PeopleOutlineTwoTone';
-import PageHeader from '@components/PageHeader';
+
+import Employees from '@components/Employees';
 interface HomeProps {}
 const Home = ({}: HomeProps) => {
   const styles = useStyles();
@@ -12,11 +12,7 @@ const Home = ({}: HomeProps) => {
       <SideMenu />
       <div className={classNames(styles.appMain)}>
         <Header />
-        <PageHeader
-          title="Page Header"
-          subTitle="subtitle"
-          icon={<PeopleOutlineTwoToneIcon fontSize="large" />}
-        />
+        <Employees />
       </div>
     </div>
   );
