@@ -1,10 +1,48 @@
-import { makeStyles, Paper } from '@material-ui/core';
+import {
+  makeStyles,
+  Paper,
+  TableBody,
+  TableCell,
+  TableRow,
+} from '@material-ui/core';
 import EmployeeForm from '@components/EmployeeForm';
 import PeopleOutlineTwoToneIcon from '@material-ui/icons/PeopleOutlineTwoTone';
 import PageHeader from '@components/PageHeader';
+import useTable from '@hooks/useTable';
+import * as employeeService from '@services/employeeService';
+import { useState } from 'react';
+import { EmployeeType } from './types';
+import { useEffect } from 'react';
+
 interface EmployeesProps {}
+const headCells: {
+  id: keyof EmployeeType;
+  label: string;
+}[] = [
+  {
+    id: 'fullName',
+    label: 'Employee Name',
+  },
+  {
+    id: 'email',
+    label: 'Email Address (Personal)',
+  },
+  {
+    id: 'mobile',
+    label: 'Mobile Number',
+  },
+  {
+    id: 'department',
+    label: 'Department',
+  },
+];
 const Employees = ({}: EmployeesProps) => {
   const styles = useStyles();
+  const [employees, setEmployees] = useState<EmployeeType[]>();
+  useEffect(() => {
+    setEmployees(employeeService.getAllEmployees());
+  }, []);
+  const Table = useTable<EmployeeType>(employees, headCells);
   return (
     <div>
       <PageHeader
@@ -13,7 +51,8 @@ const Employees = ({}: EmployeesProps) => {
         icon={<PeopleOutlineTwoToneIcon fontSize="large" />}
       />
       <Paper className={styles.form}>
-        <EmployeeForm />
+        {/* <EmployeeForm /> */}
+        <Table />
       </Paper>
     </div>
   );

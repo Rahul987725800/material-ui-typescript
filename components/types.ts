@@ -6,3 +6,15 @@ export interface BasicControlProps {
   value: string;
   onChange: (e: EventType) => void;
 }
+export interface EmployeeType {
+  id?: number;
+  fullName: string;
+  email: string;
+  mobile: string;
+  city: string;
+  gender: string;
+  departmentId: number;
+  hireDate: Date;
+  isPermanent: boolean;
+  department?: string;
+}

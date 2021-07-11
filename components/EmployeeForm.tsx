@@ -2,20 +2,9 @@ import useForm from '@hooks/useForm';
 import { makeStyles, Grid } from '@material-ui/core';
 import Controls from '@components/controls';
 import * as employeeService from '@services/employeeService';
-interface FormValues {
-  id: number;
-  fullName: string;
-  email: string;
-  mobile: string;
-  city: string;
-  gender: string;
-  departmentId: number;
-  hireDate: Date;
-  isPermanent: boolean;
-}
+import { EmployeeType } from './types';
 
-const initialFormValues: FormValues = {
-  id: 0,
+const initialFormValues: EmployeeType = {
   fullName: '',
   email: '',
   mobile: '',
@@ -34,10 +23,10 @@ interface EmployeeFormProps {}
 const EmployeeForm = ({}: EmployeeFormProps) => {
   const styles = useStyles();
   const { values, setValues, handleInputChange, errors, setErrors, resetForm } =
-    useForm<FormValues>(initialFormValues, validate, true);
-  function validate(formValues: FormValues = values) {
+    useForm<EmployeeType>(initialFormValues, validate, true);
+  function validate(formValues: EmployeeType = values) {
     const temp: typeof errors = {};
-    let key: keyof FormValues;
+    let key: keyof EmployeeType;
     for (key in errors) {
       // this is done so that when validating single value we don't loose
       // other field errors
