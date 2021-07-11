@@ -8,7 +8,7 @@ import {
 import EmployeeForm from '@components/EmployeeForm';
 import PeopleOutlineTwoToneIcon from '@material-ui/icons/PeopleOutlineTwoTone';
 import PageHeader from '@components/PageHeader';
-import useTable from '@hooks/useTable';
+import Table from '@components/Table';
 import * as employeeService from '@services/employeeService';
 import { useState } from 'react';
 import { EmployeeType } from './types';
@@ -18,6 +18,7 @@ interface EmployeesProps {}
 const headCells: {
   id: keyof EmployeeType;
   label: string;
+  disableSorting?: boolean;
 }[] = [
   {
     id: 'fullName',
@@ -34,6 +35,7 @@ const headCells: {
   {
     id: 'department',
     label: 'Department',
+    disableSorting: true,
   },
 ];
 const Employees = ({}: EmployeesProps) => {
@@ -42,7 +44,6 @@ const Employees = ({}: EmployeesProps) => {
   useEffect(() => {
     setEmployees(employeeService.getAllEmployees());
   }, []);
-  const Table = useTable<EmployeeType>(employees, headCells);
   return (
     <div>
       <PageHeader
@@ -52,7 +53,7 @@ const Employees = ({}: EmployeesProps) => {
       />
       <Paper className={styles.form}>
         {/* <EmployeeForm /> */}
-        <Table />
+        <Table records={employees} headCells={headCells} />
       </Paper>
     </div>
   );
