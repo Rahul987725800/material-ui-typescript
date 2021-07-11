@@ -26,7 +26,7 @@ const initialFormValues: FormValues = {
 };
 const genderItems = [
   { value: 'male', label: 'Male' },
-  { value: 'femail', label: 'Female' },
+  { value: 'female', label: 'Female' },
   { value: 'other', label: 'Other' },
 ];
 interface EmployeeFormProps {}
@@ -54,6 +54,20 @@ const EmployeeForm = ({}: EmployeeFormProps) => {
             value={values.email}
             onChange={handleInputChange}
           />
+          <Controls.TextField
+            variant="outlined"
+            label="Mobile"
+            name="mobile"
+            value={values.mobile}
+            onChange={handleInputChange}
+          />
+          <Controls.TextField
+            variant="outlined"
+            label="City"
+            name="city"
+            value={values.city}
+            onChange={handleInputChange}
+          />
         </Grid>
         <Grid item xs={6}>
           <Controls.RadioGroup
@@ -67,23 +81,32 @@ const EmployeeForm = ({}: EmployeeFormProps) => {
             name="departmentId"
             label="Department"
             value={values.departmentId}
-            onChange={handleInputChange as any}
+            onChange={handleInputChange}
             options={employeeService.getDepartmentCollection()}
+          />
+          <Controls.DatePicker
+            name="hireDate"
+            label="Hire Date"
+            value={values.hireDate}
+            onChange={handleInputChange}
           />
           <Controls.Checkbox
             name="isPermanent"
             label="Permanent Employee"
             value={values.isPermanent}
-            onChange={(e, checked: any) => {
-              e.target = {
-                ...e.target,
-                name: e.target.name,
-                value: checked,
-              };
-              // console.log(e.target);
-              handleInputChange(e);
-            }}
+            onChange={handleInputChange}
           />
+          <p
+            onClick={() => {
+              console.log(values);
+            }}
+          >
+            print
+          </p>
+          <div>
+            <Controls.Button type="submit">Submit</Controls.Button>
+            <Controls.Button color="default">Reset</Controls.Button>
+          </div>
         </Grid>
       </Grid>
     </form>

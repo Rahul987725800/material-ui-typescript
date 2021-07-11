@@ -4,14 +4,9 @@ import {
   makeStyles,
   Checkbox as MuiCheckbox,
 } from '@material-ui/core';
-import { BasicControlProps } from '.';
-type Modify<T, R> = Omit<T, keyof R> & R;
-
+import { BasicControlProps, Modify } from '@components/types';
 interface CheckboxSpecificProps {
   value: boolean;
-  onChange:
-    | ((event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void)
-    | undefined;
 }
 type CheckboxProps = Modify<BasicControlProps, CheckboxSpecificProps>;
 const Checkbox = ({ name, label, value, onChange }: CheckboxProps) => {
@@ -26,7 +21,14 @@ const Checkbox = ({ name, label, value, onChange }: CheckboxProps) => {
             name={name}
             color="primary"
             checked={value}
-            onChange={onChange}
+            onChange={(_, checked) =>
+              onChange({
+                target: {
+                  name,
+                  value: checked,
+                },
+              })
+            }
           />
         }
       />

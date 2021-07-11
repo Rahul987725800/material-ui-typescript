@@ -1,3 +1,4 @@
+import { EventType } from '@components/types';
 import {
   makeStyles,
   FormControl,
@@ -5,28 +6,25 @@ import {
   InputLabel,
   MenuItem,
 } from '@material-ui/core';
-import { BasicControlProps } from '.';
-interface SelectProps extends Omit<BasicControlProps, 'onChange'> {
+import { BasicControlProps } from '@components/types';
+interface SelectProps extends BasicControlProps {
   options: {
     id: number;
     title: string;
   }[];
-  onChange:
-    | ((
-        event: React.ChangeEvent<{
-          name?: string | undefined;
-          value: unknown;
-        }>,
-        child: React.ReactNode
-      ) => void)
-    | undefined;
 }
 const Select = ({ name, label, value, onChange, options }: SelectProps) => {
   const styles = useStyles();
   return (
     <FormControl variant="outlined">
       <InputLabel>{label}</InputLabel>
-      <MuiSelect label={label} name={name} value={value} onChange={onChange}>
+      <MuiSelect
+        label={label}
+        name={name}
+        value={value}
+        onChange={(e) => onChange(e as EventType)}
+      >
+        <MenuItem value="">None</MenuItem>
         {options.map((option, i) => {
           return (
             <MenuItem key={i} value={option.id}>

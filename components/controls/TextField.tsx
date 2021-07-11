@@ -1,5 +1,5 @@
 import { makeStyles, TextField as MuiTextField } from '@material-ui/core';
-import { BasicControlProps } from '.';
+import { BasicControlProps } from '@components/types';
 interface TextFieldProps extends BasicControlProps {
   variant?: 'standard' | 'filled' | 'outlined';
 }
