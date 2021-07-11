@@ -9,7 +9,7 @@ const Home = ({}: HomeProps) => {
   const styles = useStyles();
   return (
     <div>
-      <SideMenu />
+      {/* <SideMenu /> */}
       <div className={classNames(styles.appMain)}>
         <Header />
         <Employees />
@@ -20,7 +20,7 @@ const Home = ({}: HomeProps) => {
 export default Home;
 const useStyles = makeStyles((theme) => ({
   appMain: {
-    paddingLeft: '320px',
+    // paddingLeft: '320px',
     width: '100%',
   },
 }));

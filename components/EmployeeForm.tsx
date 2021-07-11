@@ -62,7 +62,8 @@ const EmployeeForm = ({}: EmployeeFormProps) => {
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     if (validate()) {
-      console.log('all valid');
+      employeeService.insertEmployee(values);
+      // resetForm();
     }
   };
   return (
