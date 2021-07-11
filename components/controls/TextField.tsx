@@ -1,9 +1,9 @@
-import { BasicControlProps } from '@components/types';
-import { makeStyles, TextField as MuiTextField } from '@material-ui/core';
-interface TextFieldProps extends BasicControlProps {
-  variant: 'outlined' | 'standard' | 'filled';
-  error?: string;
-}
+import {
+  makeStyles,
+  TextField as MuiTextField,
+  TextFieldProps,
+} from '@material-ui/core';
+
 const TextField = ({
   variant = 'outlined',
   name,
@@ -11,20 +11,20 @@ const TextField = ({
   value,
   onChange,
   error = '',
-}: TextFieldProps) => {
+  ...other
+}: Omit<TextFieldProps, 'error'> & { error?: string }) => {
   const styles = useStyles();
   return (
-    <div>
-      <MuiTextField
-        variant={variant}
-        label={label}
-        name={name}
-        value={value}
-        onChange={onChange}
-        error={!!error}
-        helperText={error}
-      />
-    </div>
+    <MuiTextField
+      variant={variant}
+      label={label}
+      name={name}
+      value={value}
+      onChange={onChange}
+      error={!!error}
+      helperText={error}
+      {...other}
+    />
   );
 };
 export default TextField;

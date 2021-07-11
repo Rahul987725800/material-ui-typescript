@@ -17,11 +17,13 @@ interface TableProps<T> {
     disableSorting?: boolean;
   }[];
   rowsPerPageOptions?: number[];
+  filter?: (items: T[]) => T[];
 }
 export default function Table<T>({
   records,
   headCells,
   rowsPerPageOptions = [5, 10, 25],
+  filter = (items) => items,
 }: TableProps<T>) {
   const styles = useStyles();
 
@@ -57,9 +59,9 @@ export default function Table<T>({
   }
   const recordsAfterPagingAndSorting = () => {
     if (records)
-      return sort<T>(
-        records.slice(rowsPerPage * page, rowsPerPage * (page + 1)),
-        getComparator()
+      return sort<T>(filter(records), getComparator()).slice(
+        rowsPerPage * page,
+        rowsPerPage * (page + 1)
       );
   };
   const handleSortRequest = (cellId: keyof T) => {
