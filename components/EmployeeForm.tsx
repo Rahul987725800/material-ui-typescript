@@ -9,10 +9,11 @@ interface FormValues {
   mobile: string;
   city: string;
   gender: string;
-  departmentId: string;
+  departmentId: number;
   hireDate: Date;
   isPermanent: boolean;
 }
+
 const initialFormValues: FormValues = {
   id: 0,
   fullName: '',
@@ -20,7 +21,7 @@ const initialFormValues: FormValues = {
   mobile: '',
   city: '',
   gender: 'male',
-  departmentId: '',
+  departmentId: -1,
   hireDate: new Date(),
   isPermanent: false,
 };
@@ -32,11 +33,40 @@ const genderItems = [
 interface EmployeeFormProps {}
 const EmployeeForm = ({}: EmployeeFormProps) => {
   const styles = useStyles();
-  const { values, setValues, handleInputChange } =
-    useForm<FormValues>(initialFormValues);
+  const { values, setValues, handleInputChange, errors, setErrors, resetForm } =
+    useForm<FormValues>(initialFormValues, validate, true);
+  function validate(formValues: FormValues = values) {
+    const temp: typeof errors = {};
+    let key: keyof FormValues;
+    for (key in errors) {
+      // this is done so that when validating single value we don't loose
+      // other field errors
+      temp[key] = errors[key];
+    }
+    if ('fullName' in formValues)
+      temp.fullName = formValues.fullName ? '' : 'This field is required';
+    if ('email' in formValues)
+      temp.email = /$^|.+@.+\..+/.test(formValues.email)
+        ? ''
+        : 'Invalid email format';
+    if ('mobile' in formValues)
+      temp.mobile =
+        formValues.mobile.length > 9 ? '' : 'Minimum mobile length 9';
+    if ('departmentId' in formValues)
+      temp.departmentId =
+        formValues.departmentId !== -1 ? '' : 'Please select the department';
+    setErrors(temp);
 
+    return Object.values(temp).every((x) => !x);
+  }
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+    if (validate()) {
+      console.log('all valid');
+    }
+  };
   return (
-    <form className={styles.root} autoComplete="off">
+    <form className={styles.root} autoComplete="off" onSubmit={handleSubmit}>
       <Grid container>
         <Grid item xs={6}>
           <Controls.TextField
@@ -45,6 +75,7 @@ const EmployeeForm = ({}: EmployeeFormProps) => {
             name="fullName"
             value={values.fullName}
             onChange={handleInputChange}
+            error={errors.fullName}
           />
 
           <Controls.TextField
@@ -53,6 +84,7 @@ const EmployeeForm = ({}: EmployeeFormProps) => {
             name="email"
             value={values.email}
             onChange={handleInputChange}
+            error={errors.email}
           />
           <Controls.TextField
             variant="outlined"
@@ -60,6 +92,7 @@ const EmployeeForm = ({}: EmployeeFormProps) => {
             name="mobile"
             value={values.mobile}
             onChange={handleInputChange}
+            error={errors.mobile}
           />
           <Controls.TextField
             variant="outlined"
@@ -83,6 +116,7 @@ const EmployeeForm = ({}: EmployeeFormProps) => {
             value={values.departmentId}
             onChange={handleInputChange}
             options={employeeService.getDepartmentCollection()}
+            error={errors.departmentId}
           />
           <Controls.DatePicker
             name="hireDate"
@@ -105,7 +139,9 @@ const EmployeeForm = ({}: EmployeeFormProps) => {
           </p>
           <div>
             <Controls.Button type="submit">Submit</Controls.Button>
-            <Controls.Button color="default">Reset</Controls.Button>
+            <Controls.Button color="default" onClick={resetForm}>
+              Reset
+            </Controls.Button>
           </div>
         </Grid>
       </Grid>
