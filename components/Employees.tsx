@@ -14,12 +14,12 @@ import PageHeader from '@components/PageHeader';
 import Table from '@components/Table';
 import * as employeeService from '@services/employeeService';
 import { useState } from 'react';
-import { EmployeeType } from './types';
+import { EmployeeType, NotificationType } from './types';
 import { useEffect } from 'react';
 import Controls from './controls';
 import Search from '@material-ui/icons/Search';
 import Popup from './Popup';
-
+import Notification from './Notification';
 interface EmployeesProps {}
 const headCells: {
   id: keyof EmployeeType;
@@ -49,7 +49,9 @@ const Employees = ({}: EmployeesProps) => {
   const [employees, setEmployees] = useState<EmployeeType[]>();
   const [showPopup, setShowPopup] = useState(false);
   const [employeeForEdit, setEmployeeForEdit] = useState<EmployeeType | null>();
-
+  const [notify, setNotify] = useState<NotificationType>({
+    isOpen: false,
+  });
   const [filterFunction, setFilterFunction] =
     useState<{ func: (items: EmployeeType[]) => EmployeeType[] }>();
   useEffect(() => {
@@ -83,6 +85,20 @@ const Employees = ({}: EmployeesProps) => {
     setEmployeeForEdit(null);
     setShowPopup(false);
     setEmployees(employeeService.getAllEmployees());
+    setNotify({
+      isOpen: true,
+      message: 'Submitted successfully',
+      type: 'success',
+    });
+  };
+  const deleteEmployee = (employeeId: EmployeeType['id']) => {
+    employeeService.deleteEmployee(employeeId);
+    setEmployees(employeeService.getAllEmployees());
+    setNotify({
+      isOpen: true,
+      message: 'Deleted successfully',
+      type: 'error',
+    });
   };
   return (
     <div>
@@ -122,7 +138,8 @@ const Employees = ({}: EmployeesProps) => {
           records={employees}
           headCells={headCells}
           filter={filterFunction?.func}
-          openInPopup={openInPopup}
+          setRecordForUpdate={openInPopup}
+          deleteRecord={(record) => deleteEmployee(record.id)}
         />
       </Paper>
       <Popup
@@ -135,6 +152,7 @@ const Employees = ({}: EmployeesProps) => {
           employeeForEdit={employeeForEdit}
         />
       </Popup>
+      <Notification notify={notify} setNotify={setNotify} />
     </div>
   );
 };

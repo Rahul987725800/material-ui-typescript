@@ -22,14 +22,16 @@ interface TableProps<T> {
   }[];
   rowsPerPageOptions?: number[];
   filter?: (items: T[]) => T[];
-  openInPopup?: (record: T) => void;
+  setRecordForUpdate?: (record: T) => void;
+  deleteRecord: (record: T) => void;
 }
 export default function Table<T>({
   records,
   headCells,
   rowsPerPageOptions = [5, 10, 25],
   filter = (items) => items,
-  openInPopup,
+  setRecordForUpdate,
+  deleteRecord,
 }: TableProps<T>) {
   const styles = useStyles();
 
@@ -115,11 +117,16 @@ export default function Table<T>({
               <TableCell className={styles.buttons}>
                 <Controls.ActionButton
                   color="primary"
-                  onClick={() => openInPopup?.(record)}
+                  onClick={() => setRecordForUpdate?.(record)}
                 >
                   <EditOutlinedIcon />
                 </Controls.ActionButton>
-                <Controls.ActionButton color="secondary">
+                <Controls.ActionButton
+                  color="secondary"
+                  onClick={() => {
+                    deleteRecord(record);
+                  }}
+                >
                   <CloseOutlinedIcon />
                 </Controls.ActionButton>
               </TableCell>

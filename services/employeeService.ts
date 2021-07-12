@@ -23,7 +23,13 @@ export function updateEmployee(employee: EmployeeType) {
   });
   localStorage.setItem(KEYS.employees, JSON.stringify(employees));
 }
-
+export function deleteEmployee(employeeId: EmployeeType['id']) {
+  let employees = getAllEmployees();
+  employees = employees.filter((e) => {
+    return e.id !== employeeId;
+  });
+  localStorage.setItem(KEYS.employees, JSON.stringify(employees));
+}
 export function getAllEmployees() {
   if (localStorage.getItem(KEYS.employees) === null) {
     localStorage.setItem(KEYS.employees, JSON.stringify([]));

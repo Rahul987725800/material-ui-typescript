@@ -18,3 +18,8 @@ export interface EmployeeType {
   isPermanent: boolean;
   department?: string;
 }
+export interface NotificationType {
+  isOpen: boolean;
+  message?: string;
+  type?: 'error' | 'info' | 'success' | 'warning';
+}
