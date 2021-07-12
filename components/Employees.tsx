@@ -14,12 +14,13 @@ import PageHeader from '@components/PageHeader';
 import Table from '@components/Table';
 import * as employeeService from '@services/employeeService';
 import { useState } from 'react';
-import { EmployeeType, NotificationType } from './types';
+import { ConfirmDialogType, EmployeeType, NotificationType } from './types';
 import { useEffect } from 'react';
 import Controls from './controls';
 import Search from '@material-ui/icons/Search';
 import Popup from './Popup';
 import Notification from './Notification';
+import ConfirmDialog from './ConfirmDialog';
 interface EmployeesProps {}
 const headCells: {
   id: keyof EmployeeType;
@@ -50,6 +51,9 @@ const Employees = ({}: EmployeesProps) => {
   const [showPopup, setShowPopup] = useState(false);
   const [employeeForEdit, setEmployeeForEdit] = useState<EmployeeType | null>();
   const [notify, setNotify] = useState<NotificationType>({
+    isOpen: false,
+  });
+  const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogType>({
     isOpen: false,
   });
   const [filterFunction, setFilterFunction] =
@@ -139,7 +143,16 @@ const Employees = ({}: EmployeesProps) => {
           headCells={headCells}
           filter={filterFunction?.func}
           setRecordForUpdate={openInPopup}
-          deleteRecord={(record) => deleteEmployee(record.id)}
+          deleteRecord={(record) => {
+            setConfirmDialog({
+              isOpen: true,
+              title: 'Are you sure to delete this record?',
+              subTitle: "You can't undo this operation",
+              onConfirm: () => {
+                deleteEmployee(record.id);
+              },
+            });
+          }}
         />
       </Paper>
       <Popup
@@ -153,6 +166,10 @@ const Employees = ({}: EmployeesProps) => {
         />
       </Popup>
       <Notification notify={notify} setNotify={setNotify} />
+      <ConfirmDialog
+        confirmDialog={confirmDialog}
+        setConfirmDialog={setConfirmDialog}
+      />
     </div>
   );
 };

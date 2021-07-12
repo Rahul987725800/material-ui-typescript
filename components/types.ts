@@ -23,3 +23,9 @@ export interface NotificationType {
   message?: string;
   type?: 'error' | 'info' | 'success' | 'warning';
 }
+export type ConfirmDialogType = {
+  isOpen: boolean;
+  title?: string;
+  subTitle?: string;
+  onConfirm?: () => void;
+};

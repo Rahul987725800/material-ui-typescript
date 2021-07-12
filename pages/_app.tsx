@@ -26,11 +26,11 @@ const theme = createTheme({
     //   },
     // },
   },
-  props: {
-    MuiIconButton: {
-      disableRipple: true,
-    },
-  },
+  // props: {
+  //   MuiIconButton: {
+  //     disableRipple: true,
+  //   },
+  // },
 });
 function MyApp({ Component, pageProps }: AppProps) {
   return (
