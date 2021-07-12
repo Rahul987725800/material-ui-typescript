@@ -3,8 +3,9 @@ import { makeStyles, Grid } from '@material-ui/core';
 import Controls from '@components/controls';
 import * as employeeService from '@services/employeeService';
 import { EmployeeType } from './types';
-
+import { useEffect } from 'react';
 const initialFormValues: EmployeeType = {
+  id: -1,
   fullName: '',
   email: '',
   mobile: '',
@@ -19,11 +20,24 @@ const genderItems = [
   { value: 'female', label: 'Female' },
   { value: 'other', label: 'Other' },
 ];
-interface EmployeeFormProps {}
-const EmployeeForm = ({}: EmployeeFormProps) => {
+interface EmployeeFormProps {
+  addOrEditEmployee: (employee: EmployeeType, resetForm: () => void) => void;
+  employeeForEdit?: EmployeeType | null;
+}
+const EmployeeForm = ({
+  addOrEditEmployee,
+  employeeForEdit,
+}: EmployeeFormProps) => {
   const styles = useStyles();
   const { values, setValues, handleInputChange, errors, setErrors, resetForm } =
     useForm<EmployeeType>(initialFormValues, validate, true);
+  useEffect(() => {
+    if (employeeForEdit) {
+      setValues({
+        ...employeeForEdit,
+      });
+    }
+  }, [employeeForEdit, setValues]);
   function validate(formValues: EmployeeType = values) {
     const temp: typeof errors = {};
     let key: keyof EmployeeType;
@@ -51,8 +65,7 @@ const EmployeeForm = ({}: EmployeeFormProps) => {
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     if (validate()) {
-      employeeService.insertEmployee(values);
-      // resetForm();
+      addOrEditEmployee(values, resetForm);
     }
   };
   return (

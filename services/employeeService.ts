@@ -15,6 +15,14 @@ export function insertEmployee(employee: EmployeeType) {
   employees.push(employee);
   localStorage.setItem(KEYS.employees, JSON.stringify(employees));
 }
+export function updateEmployee(employee: EmployeeType) {
+  let employees = getAllEmployees();
+  employees = employees.map((e) => {
+    if (e.id === employee.id) return employee;
+    return e;
+  });
+  localStorage.setItem(KEYS.employees, JSON.stringify(employees));
+}
 
 export function getAllEmployees() {
   if (localStorage.getItem(KEYS.employees) === null) {

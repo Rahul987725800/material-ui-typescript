@@ -9,6 +9,10 @@ import {
   TableSortLabel,
 } from '@material-ui/core';
 import { useState, useRef, useEffect } from 'react';
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
+import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
+import Controls from '@components/controls';
+// this table provides paging, sorting, filtering functionality
 interface TableProps<T> {
   records: T[] | undefined;
   headCells: {
@@ -18,12 +22,14 @@ interface TableProps<T> {
   }[];
   rowsPerPageOptions?: number[];
   filter?: (items: T[]) => T[];
+  openInPopup?: (record: T) => void;
 }
 export default function Table<T>({
   records,
   headCells,
   rowsPerPageOptions = [5, 10, 25],
   filter = (items) => items,
+  openInPopup,
 }: TableProps<T>) {
   const styles = useStyles();
 
@@ -95,6 +101,7 @@ export default function Table<T>({
                 )}
               </TableCell>
             ))}
+            <TableCell>Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -105,6 +112,17 @@ export default function Table<T>({
                   {record[cell.id]}
                 </TableCell>
               ))}
+              <TableCell className={styles.buttons}>
+                <Controls.ActionButton
+                  color="primary"
+                  onClick={() => openInPopup?.(record)}
+                >
+                  <EditOutlinedIcon />
+                </Controls.ActionButton>
+                <Controls.ActionButton color="secondary">
+                  <CloseOutlinedIcon />
+                </Controls.ActionButton>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -139,5 +157,9 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: '#fffbf2',
       cursor: 'pointer',
     },
+  },
+  buttons: {
+    display: 'flex',
+    gap: 10,
   },
 }));

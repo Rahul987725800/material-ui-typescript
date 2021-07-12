@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core';
 import EmployeeForm from '@components/EmployeeForm';
 import PeopleOutlineTwoToneIcon from '@material-ui/icons/PeopleOutlineTwoTone';
+import AddIcon from '@material-ui/icons/Add';
 import PageHeader from '@components/PageHeader';
 import Table from '@components/Table';
 import * as employeeService from '@services/employeeService';
@@ -17,6 +18,7 @@ import { EmployeeType } from './types';
 import { useEffect } from 'react';
 import Controls from './controls';
 import Search from '@material-ui/icons/Search';
+import Popup from './Popup';
 
 interface EmployeesProps {}
 const headCells: {
@@ -45,6 +47,9 @@ const headCells: {
 const Employees = ({}: EmployeesProps) => {
   const styles = useStyles();
   const [employees, setEmployees] = useState<EmployeeType[]>();
+  const [showPopup, setShowPopup] = useState(false);
+  const [employeeForEdit, setEmployeeForEdit] = useState<EmployeeType | null>();
+
   const [filterFunction, setFilterFunction] =
     useState<{ func: (items: EmployeeType[]) => EmployeeType[] }>();
   useEffect(() => {
@@ -63,6 +68,21 @@ const Employees = ({}: EmployeesProps) => {
           );
       },
     });
+  };
+  const openInPopup = (employee: EmployeeType) => {
+    setEmployeeForEdit(employee);
+    setShowPopup(true);
+  };
+  const addOrEditEmployee = (employee: EmployeeType, resetForm: () => void) => {
+    if (employee.id === -1) {
+      employeeService.insertEmployee(employee);
+    } else {
+      employeeService.updateEmployee(employee);
+    }
+    resetForm();
+    setEmployeeForEdit(null);
+    setShowPopup(false);
+    setEmployees(employeeService.getAllEmployees());
   };
   return (
     <div>
@@ -85,14 +105,36 @@ const Employees = ({}: EmployeesProps) => {
             }}
             onChange={handleSearch}
           ></Controls.TextField>
+          <Controls.Button
+            variant="outlined"
+            startIcon={<AddIcon />}
+            className={styles.newButton}
+            onClick={() => {
+              setEmployeeForEdit(null);
+              setShowPopup(true);
+            }}
+          >
+            Add New
+          </Controls.Button>
         </Toolbar>
-        {/* <EmployeeForm /> */}
+
         <Table
           records={employees}
           headCells={headCells}
           filter={filterFunction?.func}
+          openInPopup={openInPopup}
         />
       </Paper>
+      <Popup
+        showPopup={showPopup}
+        setShowPopup={setShowPopup}
+        title="Employee Form"
+      >
+        <EmployeeForm
+          addOrEditEmployee={addOrEditEmployee}
+          employeeForEdit={employeeForEdit}
+        />
+      </Popup>
     </div>
   );
 };
@@ -108,5 +150,8 @@ const useStyles = makeStyles((theme) => ({
   },
   searchInput: {
     width: '75%',
+  },
+  newButton: {
+    marginLeft: 'auto',
   },
 }));
